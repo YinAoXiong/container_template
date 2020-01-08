@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  code_12306:
+    image: yinaoxiong/12306_code_server
+    ports:
+      - 12306:80
+    environment:
+      - WORKERS=1
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy: # 重启规则
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 30s
