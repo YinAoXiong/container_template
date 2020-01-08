@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  kms:
+    image: ccr.ccs.tencentyun.com/yinaoxiong/kms
+    ports:
+      - 1688:1688
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy: # 重启规则
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 30s
